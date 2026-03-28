@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,8 +10,8 @@ const projects = [
   { name: 'Lumiere Branding', category: 'Brand Identity', image: '/images/work-1.jpg' },
   { name: 'Oasis Resort', category: 'Hospitality', image: '/images/work-2.jpg' },
   { name: 'Nova Architecture', category: 'Architecture', image: '/images/work-3.jpg' },
-  { name: 'Pulse Magazine', category: 'Editorial', image: '/images/service-3.jpg' },
-  { name: 'Zen Gardens', category: 'Landscape', image: '/images/work-4.jpg' },
+  { name: 'Pulse Magazine', category: 'Editorial', image: '/images/work-4.jpg' },
+  { name: 'Zen Gardens', category: 'Landscape', image: '/images/work-5.jpg' },
   { name: 'Metro Gallery', category: 'Art & Culture', image: '/images/work-6.jpg' },
 ];
 
@@ -62,10 +63,14 @@ const Work: React.FC = () => {
   }, []);
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
       className="work"
       onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
     >
       <p className="work__header">Selected Work</p>
 
@@ -78,18 +83,18 @@ const Work: React.FC = () => {
             onMouseEnter={() => setHoveredIdx(i)}
             onMouseLeave={() => setHoveredIdx(null)}
           >
-            <div className="work__item-inner">
-              <span className="work__item-number">0{i + 1}</span>
-              <span className="work__item-name">{p.name}</span>
-              <span className="work__item-category">{p.category}</span>
-            </div>
-            {/* Статичное изображение для мобильных */}
+            {/* Статичное изображение для мобильных — СВЕРХУ */}
             <img
               src={p.image}
               alt={p.name}
               loading="lazy"
               className="work__item-static-image"
             />
+            <div className="work__item-inner">
+              <span className="work__item-number">0{i + 1}</span>
+              <span className="work__item-name">{p.name}</span>
+              <span className="work__item-category">{p.category}</span>
+            </div>
           </li>
         ))}
       </ul>
@@ -102,7 +107,7 @@ const Work: React.FC = () => {
         loading="lazy"
         className={`work__hover-image ${hoveredIdx !== null ? 'is-visible' : ''}`}
       />
-    </section>
+    </motion.section>
   );
 };
 

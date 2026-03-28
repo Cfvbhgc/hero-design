@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,26 +22,7 @@ const About: React.FC = () => {
     if (!textRef.current) return;
 
     if (isMobile) {
-      // Мобильные: простой fade-in блока целиком
-      textRef.current.classList.add('about__text--fade');
-      gsap.fromTo(
-        textRef.current,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-          onComplete: () => {
-            textRef.current?.classList.add('is-visible');
-          },
-        }
-      );
+      // Мобильные: Framer Motion handles animation
       return;
     }
 
@@ -73,15 +55,35 @@ const About: React.FC = () => {
     ));
 
   return (
-    <section ref={sectionRef} className="about">
+    <motion.section
+      ref={sectionRef}
+      className="about"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+    >
       <div className="about__content">
         <p className="about__label">About Us</p>
 
-        <p ref={textRef} className="about__text">
+        <motion.p
+          ref={textRef}
+          className="about__text"
+          initial={isMobile ? { opacity: 0, y: 30 } : undefined}
+          whileInView={isMobile ? { opacity: 1, y: 0 } : undefined}
+          viewport={isMobile ? { once: true, amount: 0.3 } : undefined}
+          transition={isMobile ? { duration: 0.8, ease: 'easeOut' } : undefined}
+        >
           {renderWords()}
-        </p>
+        </motion.p>
 
-        <div className="about__bottom">
+        <motion.div
+          className="about__bottom"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <div className="about__stat">
             <span className="about__stat-number">50+</span>
             <span className="about__stat-label">Projects Delivered</span>
@@ -94,9 +96,9 @@ const About: React.FC = () => {
             <span className="about__stat-number">12</span>
             <span className="about__stat-label">Awards Won</span>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

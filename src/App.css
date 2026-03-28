@@ -191,19 +191,21 @@ img {
   }
   .hero__left {
     flex: 0 0 auto;
-    padding: 3rem 0;
+    padding: 2rem 0 1rem;
   }
   .hero__title {
-    font-size: clamp(3rem, 15vw, 20vw);
+    font-size: clamp(4rem, 20vw, 20rem);
     writing-mode: horizontal-tb;
     text-orientation: initial;
   }
   .hero__right {
     padding: 1rem;
+    flex: 0 0 auto;
   }
   .hero__image-wrapper {
     height: 50vh;
     clip-path: none;
+    border-radius: 12px;
   }
   .hero__subtitle {
     left: 50%;
@@ -217,9 +219,6 @@ img {
 }
 
 @media (max-width: 480px) {
-  .hero__title {
-    font-size: clamp(2.5rem, 14vw, 4rem);
-  }
   .hero__image-wrapper {
     height: 40vh;
   }
@@ -230,7 +229,7 @@ img {
 
 @media (max-width: 320px) {
   .hero__title {
-    font-size: 2.5rem;
+    font-size: 4rem;
   }
 }
 
@@ -341,16 +340,10 @@ img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 12px;
     filter: brightness(0.8) contrast(1.05);
     overflow: hidden;
-    max-height: 0;
-    opacity: 0;
-    transition: max-height 0.4s ease, opacity 0.4s ease;
-  }
-  .services__item.is-expanded .services__item-image {
-    max-height: 220px;
-    opacity: 1;
+    margin-top: 0.75rem;
   }
 }
 
@@ -456,22 +449,32 @@ img {
   opacity: 1;
 }
 
-/* Work — mobile static image */
+/* Work — mobile static image (hidden on desktop) */
 .work__item-static-image {
   display: none;
 }
+
+/* Services — mobile inline image (hidden on desktop, shown via media query) */
 
 /* Work responsive */
 @media (max-width: 768px) {
   .work {
     padding: 5rem 1.5rem;
   }
+  .work__item {
+    padding: 1.5rem 0;
+  }
   .work__item-inner {
     flex-direction: column;
     gap: 0.25rem;
   }
   .work__item-name {
-    font-size: clamp(1.5rem, 7vw, 2.5rem);
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .work__item-category {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
   }
   .work__item:hover .work__item-inner {
     transform: none;
@@ -482,9 +485,9 @@ img {
   .work__item-static-image {
     display: block;
     width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 12px;
     margin-top: 0.75rem;
     filter: brightness(0.85) contrast(1.05);
   }
@@ -495,10 +498,10 @@ img {
     padding: 4rem 1rem;
   }
   .work__item-name {
-    font-size: clamp(1.25rem, 6vw, 2rem);
+    font-size: clamp(1.25rem, 5vw, 2rem);
   }
   .work__item-static-image {
-    height: 150px;
+    height: 180px;
   }
 }
 
@@ -707,7 +710,21 @@ img {
     min-height: 60vh;
   }
   .contact__title {
-    font-size: clamp(2rem, 10vw, 15vw);
+    font-size: clamp(2.5rem, 12vw, 15vw);
+  }
+  .contact__email {
+    margin-top: 2rem;
+    font-size: 1rem;
+    background: var(--pink);
+    color: var(--bg);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .contact__email:hover {
+    color: var(--bg);
   }
   .contact__footer {
     flex-direction: column;
@@ -721,17 +738,15 @@ img {
   .contact {
     padding: 3rem 1rem;
   }
-  .contact__title {
-    font-size: clamp(2rem, 10vw, 4rem);
-  }
   .contact__email {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    padding: 0.875rem 2rem;
   }
 }
 
 @media (max-width: 320px) {
   .contact__title {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 }
 
