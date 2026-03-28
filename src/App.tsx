@@ -16,6 +16,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const App: React.FC = () => {
   useEffect(() => {
+    // Отключаем Lenis на iOS Safari — конфликтует с нативным скроллом
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    if (isIOS) return;
+
     // Lenis smooth scroll — плавный скролл
     const lenis = new Lenis({
       duration: 1.2,
