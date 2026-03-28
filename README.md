@@ -1,38 +1,40 @@
-# Hero Design — Creative Studio Portfolio
+# Hero Design — Портфолио дизайн-студии
 
-A designer's portfolio built with React + TypeScript. The portfolio itself is a design piece: massive typography, custom cursor, scroll-triggered animations, and image-follows-cursor interactions.
+Портфолио дизайнера на React + TypeScript. Сайт сам по себе является произведением дизайна: огромная типографика, кастомный курсор, scroll-анимации и изображения, следующие за курсором.
 
-## Tech Stack
+## Секции
 
-- **React 18** + **TypeScript**
-- **GSAP** (GreenSock) — scroll animations, fade-in, slide-up, stagger effects
-- **Framer Motion** — available for additional animations
-- **Google Fonts** — Syne (headings) + Manrope (body)
+1. **Hero** — огромная типографика на весь экран с GSAP-анимацией появления
+2. **Услуги** — нумерованный список (01 CONCEPTING, 02 BRANDING, 03 DIGITAL, 04 MOTION), при наведении фоновое изображение меняется
+3. **Работы** — названия проектов крупным текстом, при наведении изображение появляется и следует за курсором
+4. **О нас** — крупный текст с reveal-анимацией по словам при скролле
+5. **Контакты** — "LET'S TALK" огромными буквами
 
-## Sections
+## Возможности
 
-1. **Hero** — full-viewport massive typography with GSAP fade-in
-2. **About** — asymmetric split layout with bio and image
-3. **Work** — project list with cursor-following preview images on hover
-4. **Services** — animated counters that count up on scroll
-5. **Contact** — large CTA with email and social links
+- Кастомный курсор (только десктоп) — масштабируется на интерактивных элементах, mix-blend-mode
+- Изображение следует за курсором в секции работ
+- GSAP ScrollTrigger анимации на всех секциях
+- Lenis smooth scroll
+- Полная мобильная адаптация — аккордеон услуг, статичные фото работ
+- Тёмная тема: фон `#0d0d0d`, акценты розовый `#ff6b9d` и кремовый `#f5e6d3`
 
-## Features
+## Технологии
 
-- Custom cursor (desktop only) — scales up on hoverable elements
-- Image-follows-cursor on project list hover
-- Scroll-triggered GSAP animations throughout
-- Fully responsive — mobile gets simplified experience
-- Color palette: off-white `#f2f0ed`, near-black `#111`, accent `#e63e21`
+- React 18 + TypeScript
+- GSAP + ScrollTrigger — scroll-анимации
+- Lenis — плавный скролл
+- Framer Motion — анимации появления
+- Google Fonts: Syne (заголовки) + Manrope (текст)
 
-## Getting Started
+## Запуск
 
 ```bash
 npm install
 npm start
 ```
 
-## Build
+## Сборка
 
 ```bash
 npm run build
