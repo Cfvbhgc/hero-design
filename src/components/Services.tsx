@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -16,6 +16,17 @@ const Services: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
+
+  const isMobile = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+    []
+  );
+
+  const handleItemClick = useCallback((i: number) => {
+    if (!isMobile) return;
+    setExpandedIdx((prev) => (prev === i ? null : i));
+  }, [isMobile]);
 
   useEffect(() => {
     // Reveal-анимация каждого пункта при скролле
@@ -60,12 +71,20 @@ const Services: React.FC = () => {
           <li
             key={s.num}
             ref={(el) => { itemsRef.current[i] = el; }}
-            className="services__item"
+            className={`services__item ${expandedIdx === i ? 'is-expanded' : ''}`}
             onMouseEnter={() => setActiveIdx(i)}
             onMouseLeave={() => setActiveIdx(null)}
+            onClick={() => handleItemClick(i)}
           >
             <span className="services__number">{s.num}</span>
             <span className="services__name">{s.name}</span>
+            {/* Мобильный аккордеон — изображение раскрывается по тапу */}
+            <img
+              src={s.image}
+              alt={s.name}
+              loading="lazy"
+              className="services__item-image"
+            />
           </li>
         ))}
       </ul>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -20,8 +20,14 @@ const Work: React.FC = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
+  const isMobile = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches,
+    []
+  );
+
   // Image follows cursor — GSAP quickSetter для плавности
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isMobile) return;
     if (imageRef.current) {
       gsap.to(imageRef.current, {
         x: e.clientX - 175,
@@ -30,7 +36,7 @@ const Work: React.FC = () => {
         ease: 'power2.out',
       });
     }
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     // Scroll reveal для каждого проекта
@@ -77,6 +83,13 @@ const Work: React.FC = () => {
               <span className="work__item-name">{p.name}</span>
               <span className="work__item-category">{p.category}</span>
             </div>
+            {/* Статичное изображение для мобильных */}
+            <img
+              src={p.image}
+              alt={p.name}
+              loading="lazy"
+              className="work__item-static-image"
+            />
           </li>
         ))}
       </ul>

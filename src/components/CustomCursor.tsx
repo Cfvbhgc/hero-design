@@ -3,10 +3,16 @@ import { gsap } from 'gsap';
 
 // Custom cursor — кружок, mix-blend-mode: difference
 // Растёт при hover на интерактивные элементы
+const isTouchDevice = () =>
+  typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
+
 const CustomCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Не инициализировать на тач-устройствах
+    if (isTouchDevice()) return;
+
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -44,6 +50,9 @@ const CustomCursor: React.FC = () => {
       clearTimeout(timer);
     };
   }, []);
+
+  // Не рендерим на тач-устройствах
+  if (typeof window !== 'undefined' && isTouchDevice()) return null;
 
   return <div ref={cursorRef} className="custom-cursor" />;
 };

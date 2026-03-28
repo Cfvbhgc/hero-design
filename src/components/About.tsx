@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -12,8 +12,37 @@ const About: React.FC = () => {
   const textRef = useRef<HTMLParagraphElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
+  const isMobile = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
+    []
+  );
+
   useEffect(() => {
     if (!textRef.current) return;
+
+    if (isMobile) {
+      // Мобильные: простой fade-in блока целиком
+      textRef.current.classList.add('about__text--fade');
+      gsap.fromTo(
+        textRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+            toggleActions: 'play none none none',
+          },
+          onComplete: () => {
+            textRef.current?.classList.add('is-visible');
+          },
+        }
+      );
+      return;
+    }
 
     const words = textRef.current.querySelectorAll('.word');
 
@@ -33,7 +62,7 @@ const About: React.FC = () => {
         },
       }
     );
-  }, []);
+  }, [isMobile]);
 
   // Оборачиваем каждое слово в span
   const renderWords = () =>
