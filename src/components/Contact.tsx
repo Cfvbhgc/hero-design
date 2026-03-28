@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,7 +32,14 @@ const Contact: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="contact">
+    <motion.section
+      ref={sectionRef}
+      className="contact"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+    >
       <p className="contact__label">Get In Touch</p>
 
       <a href="mailto:hello@herodesign.studio">
@@ -54,7 +62,7 @@ const Contact: React.FC = () => {
           <a href="#top">Dribbble</a>
         </div>
       </footer>
-    </section>
+    </motion.section>
   );
 };
 

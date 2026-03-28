@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { motion } from 'framer-motion';
 
 // Hero секция — split-screen layout
 // LEFT: "HERO" вертикально, RIGHT: фото в нестандартной форме
 const Hero: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -39,7 +39,12 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="hero">
+    <motion.section
+      className="hero"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
       <div className="hero__left">
         <h1 ref={titleRef} className="hero__title">
           HERO
@@ -64,7 +69,7 @@ const Hero: React.FC = () => {
         <div className="hero__scroll-line" />
         <span className="hero__scroll-text">Scroll</span>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,17 +17,6 @@ const Services: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
-
-  const isMobile = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches,
-    []
-  );
-
-  const handleItemClick = useCallback((i: number) => {
-    if (!isMobile) return;
-    setExpandedIdx((prev) => (prev === i ? null : i));
-  }, [isMobile]);
 
   useEffect(() => {
     // Reveal-анимация каждого пункта при скролле
@@ -52,7 +42,14 @@ const Services: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="services">
+    <motion.section
+      ref={sectionRef}
+      className="services"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+    >
       {/* Фоновые изображения — crossfade */}
       {services.map((s, i) => (
         <img
@@ -71,14 +68,13 @@ const Services: React.FC = () => {
           <li
             key={s.num}
             ref={(el) => { itemsRef.current[i] = el; }}
-            className={`services__item ${expandedIdx === i ? 'is-expanded' : ''}`}
+            className="services__item"
             onMouseEnter={() => setActiveIdx(i)}
             onMouseLeave={() => setActiveIdx(null)}
-            onClick={() => handleItemClick(i)}
           >
             <span className="services__number">{s.num}</span>
             <span className="services__name">{s.name}</span>
-            {/* Мобильный аккордеон — изображение раскрывается по тапу */}
+            {/* Мобильное изображение — всегда видимо */}
             <img
               src={s.image}
               alt={s.name}
@@ -88,7 +84,7 @@ const Services: React.FC = () => {
           </li>
         ))}
       </ul>
-    </section>
+    </motion.section>
   );
 };
 
