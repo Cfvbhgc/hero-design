@@ -1,92 +1,93 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import gsap from 'gsap';
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* Данные проектов — имя, категория, путь к изображению */
+// 6 проектов — названия крупным текстом
 const projects = [
-  { name: 'Lumiere Branding', category: 'Brand Identity', image: '/images/project-1.jpg' },
-  { name: 'Oasis Resort', category: 'Digital Design', image: '/images/project-2.jpg' },
-  { name: 'Nova Architecture', category: 'Art Direction', image: '/images/project-3.jpg' },
-  { name: 'Pulse Magazine', category: 'Editorial', image: '/images/project-4.jpg' },
-  { name: 'Zen Gardens', category: 'Brand Identity', image: '/images/project-5.jpg' },
-  { name: 'Metro Gallery', category: 'Web Design', image: '/images/project-6.jpg' },
+  { name: 'Lumiere Branding', category: 'Brand Identity', image: '/images/work-1.jpg' },
+  { name: 'Oasis Resort', category: 'Hospitality', image: '/images/work-2.jpg' },
+  { name: 'Nova Architecture', category: 'Architecture', image: '/images/work-3.jpg' },
+  { name: 'Pulse Magazine', category: 'Editorial', image: '/images/service-3.jpg' },
+  { name: 'Zen Gardens', category: 'Landscape', image: '/images/work-4.jpg' },
+  { name: 'Metro Gallery', category: 'Art & Culture', image: '/images/work-6.jpg' },
 ];
 
-/**
- * Секция Work — список проектов с превью-изображением,
- * которое следует за курсором при наведении.
- */
 const Work: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const [activeProject, setActiveProject] = useState<number | null>(null);
+  const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Поочерёдное появление элементов списка
-      gsap.from('.work__item', {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 65%',
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Отслеживание курсора для превью изображения
+  // Image follows cursor — GSAP quickSetter для плавности
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (previewRef.current) {
-      previewRef.current.style.left = `${e.clientX}px`;
-      previewRef.current.style.top = `${e.clientY}px`;
+    if (imageRef.current) {
+      gsap.to(imageRef.current, {
+        x: e.clientX - 175,
+        y: e.clientY - 125,
+        duration: 0.3,
+        ease: 'power2.out',
+      });
     }
   }, []);
 
-  const handleMouseEnter = useCallback((index: number) => {
-    setActiveProject(index);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setActiveProject(null);
+  useEffect(() => {
+    // Scroll reveal для каждого проекта
+    itemsRef.current.forEach((item, i) => {
+      if (!item) return;
+      gsap.fromTo(
+        item,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+          delay: i * 0.08,
+        }
+      );
+    });
   }, []);
 
   return (
-    <section className="work" id="work" ref={sectionRef} onMouseMove={handleMouseMove}>
-      <p className="work__label">Selected Work</p>
-      <div className="work__list">
-        {projects.map((project, index) => (
-          <div
-            key={project.name}
-            className="work__item hoverable"
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <span className="work__item-name">{project.name}</span>
-            <span className="work__item-category">{project.category}</span>
-          </div>
-        ))}
-      </div>
+    <section
+      ref={sectionRef}
+      className="work"
+      onMouseMove={handleMouseMove}
+    >
+      <p className="work__header">Selected Work</p>
 
-      {/* Превью — изображение, следующее за курсором */}
-      <div
-        ref={previewRef}
-        className={`work__preview ${activeProject !== null ? 'visible' : ''}`}
-      >
-        {activeProject !== null && (
-          <img
-            src={process.env.PUBLIC_URL + projects[activeProject].image}
-            alt={projects[activeProject].name}
-          />
-        )}
-      </div>
+      <ul className="work__list">
+        {projects.map((p, i) => (
+          <li
+            key={p.name}
+            ref={(el) => { itemsRef.current[i] = el; }}
+            className="work__item"
+            onMouseEnter={() => setHoveredIdx(i)}
+            onMouseLeave={() => setHoveredIdx(null)}
+          >
+            <div className="work__item-inner">
+              <span className="work__item-number">0{i + 1}</span>
+              <span className="work__item-name">{p.name}</span>
+              <span className="work__item-category">{p.category}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {/* Hover image — следует за курсором */}
+      <img
+        ref={imageRef}
+        src={hoveredIdx !== null ? projects[hoveredIdx].image : ''}
+        alt=""
+        className={`work__hover-image ${hoveredIdx !== null ? 'is-visible' : ''}`}
+      />
     </section>
   );
 };

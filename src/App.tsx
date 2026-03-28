@@ -1,49 +1,51 @@
-import React from 'react';
-import './App.css';
+import React, { useEffect } from 'react';
+import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import CustomCursor from './components/CustomCursor';
 import Hero from './components/Hero';
-import About from './components/About';
-import Work from './components/Work';
 import Services from './components/Services';
+import Work from './components/Work';
+import About from './components/About';
 import Contact from './components/Contact';
 
-/**
- * Главный компонент приложения — собирает все секции портфолио.
- * Навигация фиксирована сверху с mix-blend-mode: difference.
- */
-function App() {
+import './App.css';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const App: React.FC = () => {
+  useEffect(() => {
+    // Lenis smooth scroll — плавный скролл
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove(lenis.raf as any);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      {/* Кастомный курсор — только на десктопе */}
+    <div className="app">
       <CustomCursor />
-
-      {/* Навигация */}
-      <nav className="nav">
-        <div className="nav__logo">HERO</div>
-        <div className="nav__links">
-          <a href="#about">About</a>
-          <a href="#work">Work</a>
-          <a href="#services">Services</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </nav>
-
-      {/* Секции страницы */}
       <Hero />
-      <About />
-      <Work />
       <Services />
+      <Work />
+      <About />
       <Contact />
-
-      {/* Футер */}
-      <footer className="footer">
-        <span className="footer__text">
-          &copy; 2026 Hero Design. All rights reserved.
-        </span>
-        <span className="footer__text">Creative Studio</span>
-      </footer>
     </div>
   );
-}
+};
 
 export default App;

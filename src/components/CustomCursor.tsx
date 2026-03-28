@@ -1,54 +1,47 @@
 import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 
-/**
- * Кастомный курсор — кружок, который увеличивается при наведении
- * на интерактивные элементы. Только для десктопа.
- */
+// Custom cursor — кружок, mix-blend-mode: difference
+// Растёт при hover на интерактивные элементы
 const CustomCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Проверяем, есть ли тач-устройство
-    const isTouchDevice = window.matchMedia('(max-width: 768px)').matches;
-    if (isTouchDevice) return;
-
-    document.body.classList.add('custom-cursor-active');
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    // Отслеживаем позицию мыши
-    const onMouseMove = (e: MouseEvent) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
+    // Быстрое следование за мышью через GSAP
+    const moveCursor = (e: MouseEvent) => {
+      gsap.to(cursor, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.15,
+        ease: 'power2.out',
+      });
     };
 
-    // Увеличиваем курсор при наведении на ссылки и кнопки
-    const onMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON' ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.classList.contains('hoverable')
-      ) {
-        cursor.classList.add('hover');
-      }
+    // Hover state для интерактивных элементов
+    const handleMouseEnter = () => cursor.classList.add('is-hovering');
+    const handleMouseLeave = () => cursor.classList.remove('is-hovering');
+
+    const addHoverListeners = () => {
+      const interactives = document.querySelectorAll(
+        'a, button, .services__item, .work__item, .contact__title'
+      );
+      interactives.forEach((el) => {
+        el.addEventListener('mouseenter', handleMouseEnter);
+        el.addEventListener('mouseleave', handleMouseLeave);
+      });
     };
 
-    const onMouseOut = () => {
-      cursor.classList.remove('hover');
-    };
+    window.addEventListener('mousemove', moveCursor);
 
-    window.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseover', onMouseOver);
-    document.addEventListener('mouseout', onMouseOut);
+    // Даем DOM подгрузиться
+    const timer = setTimeout(addHoverListeners, 500);
 
     return () => {
-      document.body.classList.remove('custom-cursor-active');
-      window.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseover', onMouseOver);
-      document.removeEventListener('mouseout', onMouseOut);
+      window.removeEventListener('mousemove', moveCursor);
+      clearTimeout(timer);
     };
   }, []);
 
