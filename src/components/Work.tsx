@@ -86,6 +86,7 @@ const Work: React.FC = () => {
         ref={imageRef}
         src={hoveredIdx !== null ? projects[hoveredIdx].image : ''}
         alt=""
+        loading="lazy"
         className={`work__hover-image ${hoveredIdx !== null ? 'is-visible' : ''}`}
       />
     </section>

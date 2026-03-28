@@ -48,6 +48,7 @@ const Services: React.FC = () => {
           key={s.num}
           src={s.image}
           alt=""
+          loading="lazy"
           className={`services__bg-image ${activeIdx === i ? 'is-active' : ''}`}
         />
       ))}
