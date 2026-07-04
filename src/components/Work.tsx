@@ -7,12 +7,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 // 6 проектов — названия крупным текстом
 const projects = [
-  { name: 'Lumiere Branding', category: 'Brand Identity', image: '/images/work-1.jpg' },
-  { name: 'Oasis Resort', category: 'Hospitality', image: '/images/work-2.jpg' },
-  { name: 'Nova Architecture', category: 'Architecture', image: '/images/work-3.jpg' },
-  { name: 'Pulse Magazine', category: 'Editorial', image: '/images/work-4.jpg' },
-  { name: 'Zen Gardens', category: 'Landscape', image: '/images/work-5.jpg' },
-  { name: 'Metro Gallery', category: 'Art & Culture', image: '/images/work-6.jpg' },
+  { name: 'Lumiere Branding', category: 'Brand Identity', image: 'images/work-1.jpg' },
+  { name: 'Oasis Resort', category: 'Hospitality', image: 'images/work-2.jpg' },
+  { name: 'Nova Architecture', category: 'Architecture', image: 'images/work-3.jpg' },
+  { name: 'Pulse Magazine', category: 'Editorial', image: 'images/work-4.jpg' },
+  { name: 'Zen Gardens', category: 'Landscape', image: 'images/work-5.jpg' },
+  { name: 'Metro Gallery', category: 'Art & Culture', image: 'images/work-6.jpg' },
 ];
 
 const Work: React.FC = () => {

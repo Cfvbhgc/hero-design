@@ -7,10 +7,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Услуги — нумерованный список с фоновыми картинками
 const services = [
-  { num: '01', name: 'Concepting', image: '/images/service-1.jpg' },
-  { num: '02', name: 'Branding', image: '/images/service-2.jpg' },
-  { num: '03', name: 'Digital', image: '/images/service-3.jpg' },
-  { num: '04', name: 'Motion', image: '/images/service-4.jpg' },
+  { num: '01', name: 'Concepting', image: 'images/service-1.jpg' },
+  { num: '02', name: 'Branding', image: 'images/service-2.jpg' },
+  { num: '03', name: 'Digital', image: 'images/service-3.jpg' },
+  { num: '04', name: 'Motion', image: 'images/service-4.jpg' },
 ];
 
 const Services: React.FC = () => {

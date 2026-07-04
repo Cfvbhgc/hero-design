@@ -54,7 +54,7 @@ const Hero: React.FC = () => {
       <div className="hero__right">
         <div ref={imageRef} className="hero__image-wrapper">
           <img
-            src="/images/hero.jpg"
+            src="images/hero.jpg"
             alt="Hero Design Studio"
             className="hero__image"
           />
